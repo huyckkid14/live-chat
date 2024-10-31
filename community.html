@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TurboChat Community</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Linking the external CSS file -->
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="community.html">Community</a></li>
+                <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="terms-of-use.html">Terms of Use</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>TurboChat Community</h1>
+<button id="view-reported-posts-btn">View Reported Posts</button>
+
+<!-- Modal for displaying reported posts -->
+<div id="reported-posts-modal" style="display:none;">
+  <div class="modal-content">
+    <span id="close-modal-btn">&times;</span>
+    <h2>Reported Posts</h2>
+    <div id="reported-posts-container">
+      <!-- Reported posts will be loaded here -->
+    </div>
+  </div>
+</div>
+
+
+        <!-- Form for creating a post -->
+        <div id="create-post">
+            <h2>Post an Update or Question</h2>
+            <form id="post-form">
+                <textarea id="post-content" rows="4" placeholder="Share an update or ask a question..."></textarea>
+                <br>
+                <button type="submit">Post</button>
+            </form>
+        </div>
+<div id="sort-options">
+    <label for="sort-by">Sort by: </label>
+    <select id="sort-by">
+        <option value="newest">Newest</option>
+        <option value="oldest">Oldest</option>
+    </select>
+</div>
+
+        <!-- Display posts -->
+        <div id="posts-section">
+            <h2>Community Posts</h2>
+            <div id="posts-container">
+                <!-- Posts will be dynamically loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <script src="community.js"></script> <!-- Linking external JavaScript file -->
+</body>
+</html>

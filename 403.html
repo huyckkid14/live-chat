@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>403 Server Disabled</title>
+  <style>
+    body {
+      background-color: #f0f0f0;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #333;
+    }
+
+    p {
+      color: #666;
+    }
+
+    a {
+      color: #3498db;
+      text-decoration: none;
+      font-size: 1.2em;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    #play-text {
+      font-size: 1.5em;
+      color: #333;
+      margin-top: 30px;
+    }
+
+    canvas {
+      background-color: #000;
+      border: 2px solid #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>403 Server Disabled</h1>
+    <p>Sorry. Due to issues, the website is currently closed for all non-admin users. Thank you for your understanding.</p>
+    <a href="/">Go back to the homepage</a>
+  </div>
+  
+  <div id="play-text">Play this while you wait:</div>
+  <canvas id="pong" width="800" height="400"></canvas>
+  
+  <script src="pong.js"></script>
+</body>
+</html>

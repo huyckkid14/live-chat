@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TurboChat</title>
+  <link rel="stylesheet" href="admin.css">
+  <link rel="icon" href="/turbochat_favicon.png" type="image/png">
+<!-- Include RecordRTC library -->
+<script src="https://cdn.webrtc-experiment.com/RecordRTC.js"></script>
+<script src="https://cdn.webrtc-experiment.com/DetectRTC.js"></script>
+
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>      
+</head>
+<body>
+
+  <header>
+    <nav>
+      <ul>
+        <li><a href="">Home</a></li>
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="terms-of-use.html">Terms of Use</a></li>
+      </ul>
+    </nav>
+  </header><br>
+<div id="theme-selector">
+  <label for="theme">Choose Chat Theme: </label>
+  <select id="theme" onchange="changeTheme(this.value)">
+    <option value="default">Default</option>
+    <option value="night">Night Mode</option>
+    <option value="space">Space</option>
+    <option value="beach">Beach</option>
+  </select>
+</div>
+
+<div class="white">
+  <center><h1>TurboChat</h1><br><h3>The only fast chatting server in the history of the world</h3></center>
+</div>
+  
+  <div class="warning">WARNING: Your connection to this site is not secure.</div>
+  <div class="warning">WARNING: Your data is automatically saved by default. Press "Do not remember me" to avoid unauthorized access to your credentials.</div>
+
+<!-- Verification Modal -->
+<div id="verify-modal" class="verify-modal">
+  <div class="verify-modal-content">
+    <h2>Attention</h2>
+    <p>This site is for admins only. Enter password to proceed.</p>
+    <input type="password" id="admin-password" placeholder="Enter password">
+    <button onclick="verifyAdmin()">Submit</button>
+  </div>
+</div>
+
+<!-- Theme Modal -->
+
+
+
+  <!-- Signup Form -->
+  <div id="signup">
+    <h1>Signup</h1>
+    <input type="text" id="signup-username" placeholder="Enter your username">
+    <input type="password" id="signup-password" placeholder="Enter your password">
+    <button onclick="signup()">Signup</button>
+  </div>
+<div id="warning-modal" class="modal">
+  <div class="modal-content">
+    <h2>Warning</h2>
+    <p>This feature is glitched. Type "Proceed" to proceed anyway.</p>
+    <input type="text" id="proceed-input" placeholder="Type 'Proceed' to continue">
+    <button onclick="handleProceed()">Submit</button>
+  </div>
+</div>
+
+  <!-- Login Form -->
+  <div id="login">
+    <h1>Login</h1>
+    <input type="text" id="login-username" placeholder="Enter your username">
+    <input type="password" id="login-password" placeholder="Enter your password">
+    <label>
+      <input type="checkbox" id="do-not-remember-me"> Do not remember me
+    </label>
+    <button onclick="login()">Login</button>
+  </div>
+
+  <!-- Chat Interface -->
+  <div id="chat" style="display:none;">
+    <h1>Chat</h1>
+    <div>
+      <span id="current-user"></span>
+      <button onclick="logout()">Logout</button>
+    </div>
+    <div>
+      <h2>Online Users</h2>
+      <div id="admin-duty">Admin on duty</div>
+      <ul id="online-users"></ul>
+    </div>
+    <input type="text" id="to" placeholder="Send to">
+    <input type="text" id="message" placeholder="Enter message">
+    <button onclick="sendMessage()">Send</button>
+    <input type="file" id="image-upload" accept="image/*">
+    <button onclick="sendImage()">Send Image</button>
+
+
+<!-- Add buttons to your HTML -->
+<button id="record-btn" onclick="startRecording()">🎤 Start Recording</button>
+<button id="stop-record-btn" onclick="stopRecording()" style="display:none;">Stop Recording</button>
+<audio id="audio-preview" controls style="display:none;"></audio>
+<button id="send-voice-btn" onclick="sendVoiceMessage()" style="display:none;">Send Voice Message</button>
+<div id="theme-modal" class="theme-modal">
+  <div class="theme-modal-content">
+    <h2>New Feature: Incognito Mode!</h2>
+    <video id="theme-video" src="/incognito-tutorial.mp4" autoplay loop muted></video>
+    <p>Admins, you can now be undercover with the system command /incognito! Just type the command, and you'll no longer be visible to other users. Refresh the page to become visble again.</p>
+    <!-- Checkbox for "Do not show again" -->
+    <label>
+      <input type="checkbox" id="do-not-show-again"> Do not show again
+    </label>
+    <button onclick="closeThemeModal()">Got it!</button>
+  </div>
+</div>
+
+
+<audio id="audio-preview" controls style="display: none;"></audio>
+    <div id="messages"></div>
+    <div id="typing-indicator" style="display: none;"></div>
+  </div>
+<!-- Terms Modal -->
+<div id="terms-modal" class="modal">
+  <div class="modal-content">
+    <h2>Notice</h2>
+    <p>To use our Site, you must agree to the terms.</p>
+    <div class="scrollbox">
+      <div class="content">
+<div class="content">
+    <h1>TurboChat Terms of Use</h1>
+    <p id="LastUpdated"><strong>Last Updated: 9/2/24 11:45AM EDT</strong></p>
+
+    <h2 id="intro">Introduction</h2>
+    <p>Welcome to TurboChat! These Terms of Use ("Terms") govern your use of the TurboChat service ("Service"). By using TurboChat, you agree to comply with these Terms. If you do not agree with these Terms, please do not use TurboChat.</p>
+
+    <h2 id="eligibility">Eligibility</h2>
+    <p>You must be at least 13 years old to use TurboChat. By using TurboChat, you represent and warrant that you meet this age requirement.</p>
+
+    <h2 id="account-registration">Account Registration</h2>
+    <p>To use TurboChat, you must create an account by providing a username and password. You are responsible for maintaining the confidentiality of your account information and for all activities that occur under your account.</p>
+
+    <h2 id="user-conduct">User Conduct</h2>
+    <p>When using TurboChat, you agree to the following rules of conduct:</p>
+    <ul>
+      <li><strong>Respect Others</strong>: Treat all users with respect. Do not engage in any behavior that is harmful, abusive, or disruptive to the community.</li>
+      <li><strong>No Swearing or Inappropriate Language</strong>: Do not use any swearing, obscene, or inappropriate language. This includes but is not limited to profanity, racial slurs, or sexually explicit language.</li>
+      <li><strong>No Harassment or Bullying</strong>: Do not harass, bully, or intimidate other users. This includes sending unwanted messages, threats, or engaging in any form of discriminatory behavior.</li>
+      <li><strong>No Illegal Activities</strong>: Do not use TurboChat to engage in any illegal activities. This includes, but is not limited to, promoting or engaging in criminal activities, hacking, or distributing illegal content.</li>
+      <li><strong>No Spam</strong>: Do not send unsolicited or irrelevant messages to other users. This includes advertisements, promotional materials, or repetitive messages.</li>
+      <li><strong>No Impersonation</strong>: Do not impersonate any person or entity, including other users, moderators, or administrators.</li>
+      <li id="devtools-rule"><strong>No Unauthorized Use of Developer Tools</strong>: Only admins are allowed to use browser Developer Tools (DevTools) or any similar tools. Unauthorized use by regular users may result in account suspension or termination.</li>
+    </ul>
+
+    <h2 id="content-guidelines">Content Guidelines</h2>
+    <p>When sharing content on TurboChat, you agree to the following guidelines:</p>
+    <ul>
+      <li><strong>Appropriate Content</strong>: Ensure that all content shared is appropriate for all users. Do not share content that is explicit, violent, or otherwise inappropriate.</li>
+      <li><strong>Intellectual Property</strong>: Do not share content that infringes on the intellectual property rights of others. This includes, but is not limited to, copyrighted material, trademarks, or proprietary information without proper authorization.</li>
+      <li><strong>Accuracy</strong>: Ensure that all information shared is accurate and truthful. Do not spread false information or rumors.</li>
+    </ul>
+
+    <h2 id="privacy">Privacy</h2>
+    <p>Your use of TurboChat is also governed by our <a href="/privacy-policy.html">Privacy Policy</a>.</p>
+
+    <h2 id="termination">Termination</h2>
+    <p>We reserve the right to terminate or suspend your account at any time, with or without notice, for any violation of these Terms or for any other reason at our sole discretion.</p>
+
+    <h2 id="limitation">Limitation of Liability</h2>
+    <p>To the maximum extent permitted by law, TurboChat shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages, or any other damages of any kind, arising out of or related to your use of TurboChat.</p>
+
+    <h2 id="changes">Changes to Terms</h2>
+    <p>We may update these Terms from time to time. We will notify you of any changes by posting the new Terms on this page and updating the "Last Updated" date. You are advised to review these Terms periodically for any changes. Your continued use of TurboChat after any modifications to the Terms will constitute your acknowledgment of the modifications and your consent to abide and be bound by the modified Terms.</p>
+
+    <h2 id="contact">Contact Us</h2>
+    <p>If you have any questions about these Terms, please contact us at [Your Contact Information].</p>
+  </div>
+        <!-- Your content goes here... -->
+        <!-- Include the terms content as you provided in your question -->
+      </div>
+    </div>
+    <button id="agree-button" disabled>More</button>
+  </div>
+</div>
+
+<div id="admin-notice-modal" class="admin-modal" style="display: none;">
+  <div class="admin-modal-content">
+
+      <h2>Admin Bugs</h2>
+      <ul>
+	<li>Messages sent from users are quadrupled as a glitch.</li>
+	<li>System messages first start off as undefined commands, then follows the commands</li>
+	<li>The command /remove user <username> from SERVER is broken. We recommmend not using it.</li>
+      <ul>
+      <button onclick="closeAdminNoticeModal()">OK</button>
+
+  </div>
+</div>
+
+  <!-- Footer -->
+  <div id="footer">Copyright &copy; 2024 by TurboCHAT. All rights reserved. By using our services, you agree to the <a href="/privacy-policy.html">Privacy Policy.</a></div>
+  <div id="notifications" class="notifications"></div>
+  <div id="server-notification"></div>
+
+  <!-- JavaScript -->
+  <script src="admin.js"></script>
+<script>
+  // Check if the current hostname and port match "turbochat.com:1010"
+  if (window.location.hostname === 'turbochat.com' && window.location.port === '1010') {
+    // Redirect to "localhost:1010"
+    window.location.href = 'http://localhost:1010' + window.location.pathname + window.location.search;
+  }
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Apply the saved theme on load
+  const savedTheme = localStorage.getItem('chatTheme') || 'default';
+  changeTheme(savedTheme);
+
+  // Check if the admin is already verified
+  const isAdminVerified = localStorage.getItem('isAdminVerified');
+  if (isAdminVerified !== 'true') {
+    document.getElementById('verify-modal').style.display = 'block'; // Show verification modal
+  } else {
+    document.getElementById('verify-modal').style.display = 'none';
+  }
+});
+
+// Function to change chat theme
+function changeTheme(theme) {
+  document.body.className = ''; // Reset any existing theme classes
+  document.body.classList.add(`${theme}-theme`); // Apply the selected theme
+
+  // Save the selected theme in localStorage
+  localStorage.setItem('chatTheme', theme);
+}
+
+// Function to verify admin password
+function verifyAdmin() {
+  const enteredPassword = document.getElementById('admin-password').value;
+  const hashedPassword = hashPassword(enteredPassword); // Hash the entered password
+
+  const correctHash = "10c4981bb793e1698a83aea43030a388"; // MD5 hash of "admin123!"
+
+  // Log the hashed versions of the entered password and the correct password
+  console.log("Entered Password (Hashed):", hashedPassword);
+  console.log("Correct Password (Hash):", correctHash);
+
+  if (hashedPassword === correctHash) {
+    // Password is correct, hide the modal
+    document.getElementById('verify-modal').style.display = 'none';
+    localStorage.setItem('isAdminVerified', 'true'); // Store verification status
+  } else {
+    alert('Incorrect password. Access denied.');
+  }
+}
+
+// Function to hash the password using MD5
+function hashPassword(password) {
+  // Hash the password using CryptoJS library
+  return CryptoJS.MD5(password).toString();
+}
+
+
+// Function to hash the password using MD5
+function hashPassword(password) {
+  // Hash the password using CryptoJS library
+  return CryptoJS.MD5(password).toString();
+}
+
+// Function to close the Admin Notice Modal
+function closeAdminNoticeModal() {
+  document.getElementById('admin-notice-modal').style.display = 'none';
+}
+
+</script>
+<script>
+// Function to show the theme modal
+function showThemeModal() {
+  // Check if the user has previously chosen to not show the modal again
+  const doNotShow = localStorage.getItem('doNotShowThemeModal');
+  if (doNotShow !== 'true') { // If not, show the modal
+    document.getElementById('theme-modal').style.display = 'block';
+  }
+}
+
+// Function to close the theme modal
+function closeThemeModal() {
+  // Check if the checkbox is checked
+  const doNotShowAgainCheckbox = document.getElementById('do-not-show-again');
+  if (doNotShowAgainCheckbox.checked) {
+    // Store the preference in localStorage
+    localStorage.setItem('doNotShowThemeModal', 'true');
+  }
+  // Close the modal
+  document.getElementById('theme-modal').style.display = 'none';
+}
+
+// Automatically show the modal on page load if the user has not opted out
+document.addEventListener('DOMContentLoaded', (event) => {
+  showThemeModal();
+});
+
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const onlineUsersList = document.getElementById('online-users');
+
+  // Function to update the status of a specific user
+  function updateUserStatusGlobally(username, isInactive) {
+    const userItems = onlineUsersList.getElementsByTagName('li');
+
+    for (let item of userItems) {
+      if (item.textContent.includes(username)) {
+        const usernameSpan = item.querySelector('.username'); // Assuming there's a span with class 'username' to identify the user
+
+        if (usernameSpan) {
+          if (isInactive) {
+            if (!usernameSpan.textContent.startsWith('😴')) {
+              usernameSpan.textContent = '😴 ' + username; // Add sleep emoji if not already there
+            }
+          } else {
+            usernameSpan.textContent = username.replace(/^😴 /, ''); // Remove sleep emoji when active
+          }
+        }
+      }
+    }
+  }
+
+  // Event handler for visibility changes
+  function handleVisibilityChange() {
+    const isInactive = document.visibilityState === 'hidden';
+    const myUsername = getCurrentUsername(); // Implement this function to return the current user's username
+
+    // Update the status locally
+    updateUserStatusGlobally(myUsername, isInactive);
+
+    // Send the status update to the server
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({ type: 'statusChange', username: myUsername, isInactive: isInactive }));
+    }
+  }
+
+  // Listen for visibility changes
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+
+  // Initialize user status
+  handleVisibilityChange();
+});
+</script>
+
+</body>
+</html>

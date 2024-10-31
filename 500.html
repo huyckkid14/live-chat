@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>500 Internal Server Error</title>
+  <style>
+    body {
+      background-color: grey;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #333;
+    }
+
+    p {
+      color: #666;
+    }
+
+    a {
+      color: #3498db;
+      text-decoration: none;
+      font-size: 1.2em;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    #consoleOutput {
+      background-color: black;
+      color: #00FF00;
+      padding: 10px;
+      height: 300px;
+      width: 500px;
+      overflow-y: scroll;
+      font-family: monospace;
+      text-align: left;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="/electrocuted-500-error.png" alt="electrocuted-monkey-500-error" width="250">
+    <h1>500 Internal Server Error</h1>
+    <p>Something went wrong on our end. Please try again later.</p>
+    <a href="/">Go back to the homepage</a>
+    <div id="consoleOutput">
+      <pre id="errorDetails">Loading error details...</pre>
+    </div>
+  </div>
+  <script>
+    // JavaScript to read query params and display error details
+    function getQueryParam(param) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(param);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const errorMessage = getQueryParam("errorMessage");
+      const errorStack = getQueryParam("errorStack");
+
+      if (errorStack) {
+        document.getElementById("errorDetails").textContent = decodeURIComponent(errorStack);
+      } else if (errorMessage) {
+        document.getElementById("errorDetails").textContent = decodeURIComponent(errorMessage);
+      } else {
+        document.getElementById("errorDetails").textContent = "Notice: Remember to add 'googleId TEXT UNIQUE,' row in DB";
+      }
+    });
+  </script>
+</body>
+</html>

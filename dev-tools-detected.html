@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>500 Internal Server Error</title>
+  <style>
+    body {
+      background-color: #f0f0f0;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #333;
+    }
+
+    p {
+      color: #666;
+    }
+
+    a {
+      color: #3498db;
+      text-decoration: none;
+      font-size: 1.2em;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>DevTools Detected</h1>
+    <p>Sorry. Due to security restrictions, you are not allowed to use devtools. Please close them. Thank you for your understanding. If you opened this panel by accident, please let the admins know.</p>
+  </div>
+</body>
+<script>
+(function() {
+    var devtools = {
+        open: false,
+        orientation: null
+    };
+
+    var threshold = 160; // Threshold for detecting DevTools
+
+    function checkDevTools() {
+        var widthThreshold = window.outerWidth - window.innerWidth > threshold;
+        var heightThreshold = window.outerHeight - window.innerHeight > threshold;
+        var orientation = widthThreshold ? 'vertical' : 'horizontal';
+
+        if ((window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized) || widthThreshold || heightThreshold) {
+            devtools.open = true;
+        } else {
+            devtools.open = false;
+            window.location.href = 'http://turbochat.com:1010'; // Redirect back if DevTools are closed
+        }
+    }
+
+    function sendDevToolsAlert() {
+        const username = localStorage.getItem('username'); // Assuming username is stored in localStorage
+        if (username) {
+            fetch('/dev-tools-detected.html', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Alert sent successfully.');
+                } else {
+                    console.error('Failed to send alert.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    }
+
+    checkDevTools();
+    setInterval(checkDevTools, 1000); // Continuously check every second
+
+    // Send alert immediately on page load
+    sendDevToolsAlert();
+
+    // Prevent common keyboard shortcuts
+    document.addEventListener('keydown', function(event) {
+        if ((event.ctrlKey && event.key === 'w') || (event.ctrlKey && event.shiftKey && event.key === 'I')) {
+            event.preventDefault(); // Prevent Ctrl + W and Ctrl + Shift + I
+        }
+    });
+
+    // Prevent closing the tab
+    window.onbeforeunload = function() {
+        if (devtools.open) {
+            return "DevTools must be closed to leave this page."; // Prevent leaving the page
+        }
+    };
+})();
+
+</script>
+</html>
